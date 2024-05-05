@@ -1,0 +1,45 @@
+[
+    {
+    "name":"plant1",
+    "description":"test",
+     "images": [
+            {
+                "image": "/images/products/1.jpg"
+            }
+     ],
+     "waterLevel":"70%"
+},
+{
+    "name":"plant2",
+    "description":"test2",
+     "images": [
+            {
+                "image": "/images/products/2.jpg"
+            }
+     ],
+     "waterLevel":"100%"
+
+},
+{
+    "name":"plant3",
+    "description":"test3",
+     "images": [
+            {
+                "image": "/images/products/3.jpg"
+            }
+     ],
+     "waterLevel":"80%"
+
+},
+{
+    "name":"plant4",
+    "description":"test",
+     "images": [
+            {
+                "image": "/images/products/4.jpg"
+            }
+     ],
+     "waterLevel":"50%"
+
+}
+]
