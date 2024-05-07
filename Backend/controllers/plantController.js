@@ -15,6 +15,7 @@ exports.getPlant = async (req, res, next) => {
 
 //localhost:3000/api/v1/plant/new
 http: exports.newPlant = async (req, res, next) => {
+  req.body.user = req.user.id;
   const plant = await Plant.create(req.body);
   res.status(201).json({
     success: true,
