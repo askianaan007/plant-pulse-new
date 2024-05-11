@@ -5,6 +5,9 @@ const sendEmail = require("../utils/email");
 const ErrorHandler = require("../utils/errorHandler");
 const crypto = require("crypto");
 
+
+
+//register user - http://localhost:3000/api/v1/register
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password, avatar } = req.body;
   const user = await User.create({
@@ -16,6 +19,8 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
   sendToken(user, 201, res);
 });
 
+
+//login user - http://localhost:3000/api/v1/login
 exports.loginUser = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -35,6 +40,8 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
   sendToken(user, 201, res);
 });
 
+
+//logout user - http://localhost:3000/api/v1/logout
 exports.logoutUser = (req, res, next) => {
   res
     .cookie("token", null, {
@@ -48,7 +55,9 @@ exports.logoutUser = (req, res, next) => {
     });
 };
 
-//password reset
+
+
+//password forgot - http://localhost:3000/api/v1/password/forgot
 exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
@@ -87,6 +96,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
 });
 
 
+//reset password - http://localhost:3000/api/v1/password/reset/:token
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
   const resetPasswordToken = crypto
     .createHash("sha256")
@@ -115,3 +125,50 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
   sendToken(user, 201, res);
 });
+
+
+//get user profile - http://localhost:3000/api/v1/myprofile
+exports.getUserProfile = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+//change password -
+exports.changePassword = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("+password");
+
+  //check old password
+  if (!(await user.isValidPassword(req.body.oldPassword))) {
+    return next(new ErrorHandler("Old password is incorrect"), 404);
+  }
+
+  //assigning new password
+  user.password = req.body.password;
+  await user.save();
+  res.status(200).json({
+    success: true,
+  });
+});
+
+
+//update profile
+exports.updateProfile = catchAsyncError(async (req, res, next) => {
+  const newUserDate = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserDate, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    user
+  });
+});
+

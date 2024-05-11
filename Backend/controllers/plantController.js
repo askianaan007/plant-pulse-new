@@ -4,7 +4,7 @@ const APIFeatures = require("../utils/apiFeatures");
 
 //localhost:3000/api/v1/plants
 exports.getPlant = async (req, res, next) => {
-    const apiFeatures = new APIFeatures(Plant.find(), req.query).search().filter();
+    const apiFeatures = new APIFeatures(Plant.find({user:req.user.id}), req.query).search().filter();
     const plants = await apiFeatures.query;
   res.status(200).json({
     success: "true",
@@ -13,8 +13,9 @@ exports.getPlant = async (req, res, next) => {
   });
 };
 
+
 //localhost:3000/api/v1/plant/new
-http: exports.newPlant = async (req, res, next) => {
+exports.newPlant = async (req, res, next) => {
   req.body.user = req.user.id;
   const plant = await Plant.create(req.body);
   res.status(201).json({
