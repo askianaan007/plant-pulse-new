@@ -15,10 +15,12 @@ import { AuthContext } from "../context/authContext";
 import FooterMenu from "../components/menus/FooterMenu";
 import HeaderMenu from "../components/menus/HeaderMenu";
 import { PostContext } from "../context/postContext";
+import MainPostCard from "../components/MainPostCard";
 
 const MainScreen = ({ navigation }) => {
   const [state] = useContext(AuthContext);
   const [posts] = useContext(PostContext);
+
   return (
     <ImageBackground
       source={require("../assets/leaf back.jpg")}
@@ -110,59 +112,9 @@ const MainScreen = ({ navigation }) => {
               alignItems: "center",
             }}
           >
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity
-                style={{ ...styles.sliderContent, backgroundColor: "#A03131" }}
-                onPress={() => navigation.navigate("Plants")}
-              >
-                <View style={styles.sliderContent11}>
-                  <Text style={styles.sliderMainText}>Not Healthy</Text>
-                  <Image
-                    source={require("../assets/Images/image2.png")}
-                    style={styles.sliderImage}
-                  ></Image>
-                </View>
-                <View style={{ marginLeft: 10 }}>
-                  <Text style={styles.slidersubText1}>Teena</Text>
-                  <Text style={styles.slidersubText1}>17% Water level</Text>
-                  <Text style={styles.slidersubText1}>Temp : 35°C</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.sliderContent}
-                onPress={() => navigation.navigate("Plants")}
-              >
-                <View style={styles.sliderContent11}>
-                  <Text style={styles.sliderMainText}>Not Healthy</Text>
-                  <Image
-                    source={require("../assets/Images/image2.png")}
-                    style={styles.sliderImage}
-                  ></Image>
-                </View>
-                <View style={{ marginLeft: 10 }}>
-                  <Text style={styles.slidersubText1}>Teena</Text>
-                  <Text style={styles.slidersubText1}>17% Water level</Text>
-                  <Text style={styles.slidersubText1}>Temp : 35°C</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ ...styles.sliderContent, backgroundColor: "#FFA900" }}
-                onPress={() => navigation.navigate("Plants")}
-              >
-                <View style={styles.sliderContent11}>
-                  <Text style={styles.sliderMainText}>Not Healthy</Text>
-                  <Image
-                    source={require("../assets/Images/image2.png")}
-                    style={styles.sliderImage}
-                  ></Image>
-                </View>
-                <View style={{ marginLeft: 10 }}>
-                  <Text style={styles.slidersubText1}>Teena</Text>
-                  <Text style={styles.slidersubText1}>17% Water level</Text>
-                  <Text style={styles.slidersubText1}>Temp : 35°C</Text>
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
+            <View>
+              <MainPostCard posts={posts} navigation={navigation} />
+            </View>
           </View>
           <Text
             style={{ left: "82%", marginTop: 10, color: "#fff" }}
@@ -245,30 +197,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
-  sliderContent11: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "90%",
-  },
-  sliderMainText: {
-    fontSize: 18,
-    color: "#fff",
-    transform: [{ rotate: "-90deg" }],
-    marginLeft: -20,
-  },
-  sliderImage: {
-    width: 130,
-    height: 140,
-    resizeMode: "contain",
-    marginLeft: -40,
-  },
-
-  slidersubText1: {
-    color: "#fff",
-    fontSize: 15,
-  },
   menuBtn: {
     backgroundColor: "#214530",
     height: 80,

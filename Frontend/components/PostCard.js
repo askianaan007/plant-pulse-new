@@ -7,9 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import React from "react";
-import TitleText from "../../components/titleText";
-import SubmitButton from "../../components/submitButton";
-import FooterMenu from "../../components/menus/FooterMenu";
+
 
 const PostCard = ({ posts, navigation }) => {
   return (
@@ -19,21 +17,22 @@ const PostCard = ({ posts, navigation }) => {
           <TouchableOpacity
             style={{
               ...styles.sliderContent,
-              backgroundColor: "#A03131",
+              backgroundColor: getBackgroundColor(post.waterLevel),
             }}
             onPress={() => navigation.navigate("Plants", { post: post })}
           >
             <View style={styles.sliderContent11}>
               <Text style={styles.sliderMainText}>Not Healthy</Text>
               <Image
-                source={require("../../assets/Images/image2.png")}
+                source={require("../assets/Images/image2.png")}
                 style={styles.sliderImage}
               />
             </View>
             <View style={{ marginLeft: 10 }}>
               <Text style={styles.slidersubText1}>Name: {post?.title}</Text>
-              <Text style={styles.slidersubText1}>17% Water level</Text>
-              <Text style={styles.slidersubText1}>Temp: 35°C</Text>
+              <Text style={styles.slidersubText1}>
+                Water level {post?.waterLevel}%
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -41,6 +40,17 @@ const PostCard = ({ posts, navigation }) => {
     </View>
   );
 };
+
+const getBackgroundColor = (waterLevel) => {
+  if (waterLevel <= 35) {
+    return "#A03131";
+  } else if (waterLevel <= 70) {
+    return "#FFA900";
+  } else {
+    return "#31A05F";
+  }
+};
+
 
 export default PostCard;
 

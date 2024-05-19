@@ -19,6 +19,10 @@ const plantSchema = new mongoose.Schema({
       },
     },
   ],
+  waterLevel:{
+    type: Number,
+  },
+  
   user: {
     type: mongoose.Schema.Types.ObjectId,
   },

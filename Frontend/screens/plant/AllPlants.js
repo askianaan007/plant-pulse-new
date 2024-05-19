@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import TitleText from "../../components/titleText";
-import PostCard from "./PostCard";
+import PostCard from "../../components/PostCard";
 import { PostContext } from "../../context/postContext";
 import { AuthContext } from "../../context/authContext";
+import FooterMenu from "../../components/menus/FooterMenu";
 
 const AllPlants = ({ navigation }) => {
-  const [state] = useContext(AuthContext);
   const [posts] = useContext(PostContext);
 
   return (
@@ -16,22 +16,21 @@ const AllPlants = ({ navigation }) => {
       <Text>Total posts {posts?.length}</Text>
 
       <View style={styles.container2}>
-        <View style={styles.slider}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scroll}
-          >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scroll}
+        >
+          <View style={styles.slider}>
             <PostCard posts={posts} navigation={navigation} />
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
       </View>
+      <FooterMenu />
     </View>
   );
 };
 
 export default AllPlants;
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -43,9 +42,10 @@ const styles = StyleSheet.create({
   },
   container2: {
     backgroundColor: "#fff",
-    // height: "100%",
+    height: "70%",
     width: "100%",
     top: "15%",
+    marginBottom: 100,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     // alignItems: "center",
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     padding: 30,
+    paddingBottom: 70,
   },
 
   mainText: {
