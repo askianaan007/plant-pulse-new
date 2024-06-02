@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React from "react";
 
-const MainPostCard = ({ posts, navigation }) => {
+const Alert = ({ posts, navigation }) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {posts?.map((post, i) => (
@@ -19,7 +19,7 @@ const MainPostCard = ({ posts, navigation }) => {
               ...styles.sliderContent,
               backgroundColor: getBackgroundColor(post.waterLevel),
             }}
-            onPress={() => navigation.navigate("Plants")}
+            onPress={() => navigation.navigate("Plants", { post: post })}
           >
             <View style={styles.sliderContent11}>
               <Text style={styles.sliderMainText}>
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainPostCard;
+export default Alert;

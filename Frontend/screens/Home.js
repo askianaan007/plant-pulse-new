@@ -6,8 +6,9 @@ import {
   StyleSheet,
   ImageBackground,
   ScrollView,
+  RefreshControl
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect, useCallback} from "react";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -16,24 +17,58 @@ import FooterMenu from "../components/menus/FooterMenu";
 import HeaderMenu from "../components/menus/HeaderMenu";
 import { PostContext } from "../context/postContext";
 import MainPostCard from "../components/MainPostCard";
+import axios from "axios";
+import Alert from "../components/alert";
 
 const MainScreen = ({ navigation }) => {
   const [state] = useContext(AuthContext);
-  const [posts] = useContext(PostContext);
+  const [posts, setPosts] = useContext(PostContext);
+  const [refreshing, setRefreshing] = useState(false);
 
+
+
+  // Function to fetch the latest data from the server
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://plantpulse-backend.onrender.com/api/v1/posts/get-all-post");
+      setPosts(response.data.posts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // useEffect to fetch data when component mounts
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 5000); // Fetch data every 5 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []);
+
+  // Function to handle refresh
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  }, []);
   return (
     <ImageBackground
       source={require("../assets/leaf back.jpg")}
       style={styles.backgroundImage}
     >
       <View style={styles.overlay}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            width: "90%",
           }}
         >
           <Text
@@ -45,7 +80,6 @@ const MainScreen = ({ navigation }) => {
           >
             Hi {state?.user.name} !
           </Text>
-          {/* <Text>{JSON.stringify(state, null, 4)}</Text> */}
           <View
             style={{
               height: 60,
@@ -59,43 +93,12 @@ const MainScreen = ({ navigation }) => {
             <HeaderMenu />
           </View>
         </View>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFA900",
-            width: "92%",
-            height: 130,
-            borderRadius: 20,
-            marginTop: 20,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingLeft: 10,
-            paddingRight: 10,
-          }}
-          onPress={() => navigation.navigate("Plants")}
-        >
-          <Image source={require("../assets/Images/low.png")}></Image>
-          <View style={{ width: 200, paddingLeft: 10, alignItems: "center" }}>
-            <Text style={{ fontSize: 14, color: "#fff", fontWeight: "bold" }}>
-              Teena is very thirsty! Please provide water promptly
-            </Text>
-            <Text
-              style={{
-                fontSize: 25,
-                color: "#BE0D0D",
-                fontWeight: "bold",
-                marginTop: 10,
-              }}
-            >
-              Water level 17%
-            </Text>
-          </View>
-          <Image source={require("../assets/Images/tree111.png")}></Image>
-        </TouchableOpacity>
+        <View>
+          <Alert posts={posts} navigation={navigation}/>
+        </View>
         <View
           style={{
-            width: "92%",
+            // width: "92%",
             height: 278,
             backgroundColor: "rgba(0, 0, 0, 0.2)",
             borderRadius: 20,
@@ -126,29 +129,30 @@ const MainScreen = ({ navigation }) => {
         <View
           style={{
             backgroundColor: "rgba(0, 0, 0, 0.2)",
-            width: "92%",
             height: 140,
             borderRadius: 20,
             marginTop: 20,
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
+            marginBottom:100
           }}
         >
           <View style={{ marginLeft: 20, alignItems: "center" }}>
             <TouchableOpacity
               style={styles.menuBtn}
-              onPress={() => navigation.navigate("addPlants")}
+              onPress={() => navigation.navigate("AllPlants")}
             >
               <Entypo name="water" size={30} color="#eecf65" />
             </TouchableOpacity>
             <Text style={styles.menuText}>watering</Text>
           </View>
           <View style={{ marginLeft: 40, alignItems: "center" }}>
-            <TouchableOpacity style={styles.menuBtn}>
+            <TouchableOpacity style={styles.menuBtn}
+            onPress={() => navigation.navigate("Weather")}>
               <FontAwesome5 name="temperature-high" size={30} color="#eecf65" />
             </TouchableOpacity>
-            <Text style={styles.menuText}>Humidity</Text>
+            <Text style={styles.menuText}>Weather</Text>
           </View>
           <View style={{ marginLeft: 40, alignItems: "center" }}>
             <TouchableOpacity style={styles.menuBtn}>
@@ -157,8 +161,9 @@ const MainScreen = ({ navigation }) => {
             <Text style={styles.menuText}>Schedule</Text>
           </View>
         </View>
-        <FooterMenu />
+    </ScrollView>
       </View>
+        <FooterMenu />
     </ImageBackground>
   );
 };
@@ -168,7 +173,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     flexDirection: "column",
-
+    
     flex: 1,
     resizeMode: "cover", // or 'stretch' or 'contain'
   },
@@ -178,8 +183,10 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     alignItems: "center",
-    // justifyContent: "center",
-    paddingTop: "15%",
+    justifyContent: "center",
+    paddingTop: "25%",
+    paddingLeft:20,
+    paddingRight:20,
   },
 
   profile: {

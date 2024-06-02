@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
   let token = state && state.token;
   //default axios setting
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  axios.defaults.baseURL = "http://172.20.10.2:8000/api/v1";
+  axios.defaults.baseURL = "https://plantpulse-backend.onrender.com/api/v1";
 
   return (
     <AuthContext.Provider value={[state, setState]}>

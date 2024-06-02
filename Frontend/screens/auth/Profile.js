@@ -13,9 +13,6 @@ import { AuthContext } from "../../context/authContext";
 import SubmitButton from "../../components/submitButton";
 import axios from "axios";
 
-
-
-
 const Profile = () => {
   const [state, setState] = useContext(AuthContext);
   const { user, token } = state;

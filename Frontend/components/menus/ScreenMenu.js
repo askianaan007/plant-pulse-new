@@ -10,7 +10,7 @@ import AddPlant from "../../screens/plant/AddPlant";
 import { AuthContext } from "../../context/authContext";
 import Profile from "../../screens/auth/Profile";
 import AllPlants from "../../screens/plant/AllPlants";
-
+import Weather from "../../screens/weather/Weather";
 
 const ScreenMenu = () => {
   //global state
@@ -46,6 +46,11 @@ const ScreenMenu = () => {
           <Stack.Screen
             name="AllPlants"
             component={AllPlants}
+            options={{ headerShown: false }}
+          />
+         <Stack.Screen
+            name="Weather"
+            component={Weather}
             options={{ headerShown: false }}
           />
           
